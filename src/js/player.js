@@ -624,6 +624,7 @@ class Player extends Component {
     this.on(this.tech_, 'texttrackchange', this.handleTechTextTrackChange_);
     this.on(this.tech_, 'loadedmetadata', this.updateStyleEl_);
     this.on(this.tech_, 'posterchange', this.handleTechPosterChange_);
+    this.on(this.tech_, 'dblclick', this.handleTechDoubleClick_);
 
     this.usingNativeControls(this.techGet_('controls'));
 
@@ -2120,6 +2121,16 @@ class Player extends Component {
       // Let components know the poster has changed
       this.trigger('posterchange');
     }
+  }
+
+  /**
+   * handle double click
+   *
+   * @private
+   * @method handleTechDoubleClick_
+   */
+  handleTechDoubleClick_() {
+    this.trigger('dblclick');
   }
 
   /**
