@@ -51,21 +51,14 @@ ControlBar.prototype.options_ = {
   loadEvent: 'play',
   children: [
     'playToggle',
-    'volumeMenuButton',
     'currentTimeDisplay',
     'timeDivider',
     'durationDisplay',
     'progressControl',
-    'liveDisplay',
-    'remainingTimeDisplay',
     'customControlSpacer',
+    'fullscreenToggle',
     'playbackRateMenuButton',
-    'chaptersButton',
-    'descriptionsButton',
-    'subtitlesButton',
-    'captionsButton',
-    'audioTrackButton',
-    'fullscreenToggle'
+    'volumeMenuButton',
   ]
 };
 
