@@ -57,7 +57,15 @@ class MouseTimeDisplay extends Component {
   handleMouseMove(event) {
     let duration = this.player_.duration();
     let newTime = this.calculateDistance(event) * duration;
-    let position = event.pageX - Dom.findElPosition(this.el().parentNode).left;
+    let position = 0;
+    let basePosition = event.pageX - Dom.findElPosition(this.el().parentNode).left;
+    if(event.pageX < 25) {
+      position = 25;
+    }else if(event.pageX>this.el().parentNode.offsetWidth - 25) {
+      position = this.el().parentNode.offsetWidth - 25;
+    } else {
+      position = basePosition;
+    }
 
     this.update(newTime, position);
   }
