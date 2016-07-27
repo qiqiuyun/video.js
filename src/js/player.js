@@ -222,6 +222,12 @@ class Player extends Component {
 
     this.on('fullscreenchange', this.handleFullscreenChange_);
     this.on('stageclick', this.handleStageClick_);
+    //add double click handler parameters
+    this.clickEventParams = {
+      'delay' : 400,
+      'clicks' : 0,
+      'timer': null
+    };
   }
 
   /**
@@ -624,7 +630,6 @@ class Player extends Component {
     this.on(this.tech_, 'texttrackchange', this.handleTechTextTrackChange_);
     this.on(this.tech_, 'loadedmetadata', this.updateStyleEl_);
     this.on(this.tech_, 'posterchange', this.handleTechPosterChange_);
-    this.on(this.tech_, 'dblclick', this.handleTechDoubleClick_);
 
     this.usingNativeControls(this.techGet_('controls'));
 
@@ -1001,15 +1006,24 @@ class Player extends Component {
     // We're using mousedown to detect clicks thanks to Flash, but mousedown
     // will also be triggered with right-clicks, so we need to prevent that
     if (event.button !== 0) return;
+    let thiz = this;
+    this.clickEventParams.clicks++;
+    if(this.clickEventParams.clicks === 1) {
+        this.clickEventParams.timer = setTimeout(function() {
+          if (thiz.controls()) {
+            if (thiz.paused()) {
+              thiz.play();
+            } else {
+              thiz.pause();
+            }
+          }
+          thiz.clickEventParams.clicks = 0;
+        }, this.clickEventParams.delay);
 
-    // When controls are disabled a click should not toggle playback because
-    // the click is considered a control
-    if (this.controls()) {
-      if (this.paused()) {
-        this.play();
-      } else {
-        this.pause();
-      }
+    } else {
+        clearTimeout(this.clickEventParams.timer);
+        this.trigger('dblclick');
+        this.clickEventParams.clicks = 0;
     }
   }
 
@@ -2121,16 +2135,6 @@ class Player extends Component {
       // Let components know the poster has changed
       this.trigger('posterchange');
     }
-  }
-
-  /**
-   * handle double click
-   *
-   * @private
-   * @method handleTechDoubleClick_
-   */
-  handleTechDoubleClick_() {
-    this.trigger('dblclick');
   }
 
   /**
