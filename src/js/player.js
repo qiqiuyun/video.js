@@ -2836,7 +2836,7 @@ Player.prototype.options_ = {
   defaultVolume: 0.00, // The freakin seaguls are driving me crazy!
 
   // default inactivity timeout
-  inactivityTimeout: 2000,
+  inactivityTimeout: 1000,
 
   // default playback rates
   playbackRates: [],
