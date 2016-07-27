@@ -153,7 +153,7 @@ class PlaybackRateMenuButton extends MenuButton {
    */
   updateLabel() {
     if (this.playbackRateSupported()) {
-      this.labelEl_.innerHTML = this.player().playbackRate() + 'x';
+      this.labelEl_.innerHTML = 'x' + this.player().playbackRate() + '倍速';
     }
   }
 
