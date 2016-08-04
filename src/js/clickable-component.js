@@ -98,7 +98,7 @@ class ClickableComponent extends Component {
 
     this.controlText_ = text;
     this.controlTextEl_.innerHTML = localizedText;
-    el.setAttribute('title', localizedText);
+    // el.setAttribute('title', localizedText);
 
     return this;
   }
