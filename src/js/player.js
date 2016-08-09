@@ -862,6 +862,7 @@ class Player extends Component {
    * @method handleTechWaiting_
    */
   handleTechWaiting_() {
+    this.removeClass('vjs-playing');
     this.addClass('vjs-waiting');
     this.trigger('waiting');
     this.one('timeupdate', () => this.removeClass('vjs-waiting'));
@@ -910,6 +911,7 @@ class Player extends Component {
    * @method handleTechSeeking_
    */
   handleTechSeeking_() {
+    this.removeClass('vjs-paused');
     this.addClass('vjs-seeking');
     this.trigger('seeking');
   }
