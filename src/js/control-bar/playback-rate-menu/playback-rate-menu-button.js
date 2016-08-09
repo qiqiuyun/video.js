@@ -156,7 +156,7 @@ class PlaybackRateMenuButton extends MenuButton {
       if (this.player().options_.playbackRateOption && this.player().options_.playbackRateOption.lang === 'en') {
         this.labelEl_.innerHTML = this.player().playbackRate() + 'x';
       } else {
-        this.labelEl_.innerHTML = 'x' + this.player().playbackRate() + '倍速';
+        this.labelEl_.innerHTML = 'x' + this.player().playbackRate();
       }
     }
   }
