@@ -1,6 +1,7 @@
 /**
  * @file slider.js
  */
+import window from 'global/window';
 import Component from '../component.js';
 import * as Dom from '../utils/dom.js';
 import assign from 'object.assign';
@@ -126,6 +127,8 @@ class Slider extends Component {
     // var progress =  (this.player_.scrubbing()) ? this.player_.getCache().currentTime / this.player_.duration() : this.player_.currentTime() / this.player_.duration();
     let progress = this.getPercent();
     let bar = this.bar;
+    let totalWidth = parseInt(window.getComputedStyle(bar.el().parentNode,null).width);
+    let lastWidth = totalWidth * (1 - progress);
 
     // If there's no bar...
     if (!bar) return;
@@ -139,7 +142,12 @@ class Slider extends Component {
     }
 
     // Convert to a percentage for setting
-    let percentage = (progress * 100).toFixed(2) + '%';
+    let percentage = null;
+    if( lastWidth < 7 ){
+      percentage = ((totalWidth - 7)/totalWidth * 100).toFixed(2) + '%';
+    } else {
+      percentage = (progress * 100).toFixed(2) + '%';
+    }
 
     // Set the new bar width or height
     if (this.vertical()) {
