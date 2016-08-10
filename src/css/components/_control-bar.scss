@@ -24,7 +24,7 @@
 $ie8screen: "\\0screen";
 
 // Video has started playing AND user is inactive
-.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+.vjs-has-started.vjs-user-inactive .vjs-control-bar {
   // Remain visible for screen reader and keyboard users
   visibility: visible;
   opacity: 0;
