@@ -143,7 +143,7 @@ class Slider extends Component {
 
     // Convert to a percentage for setting
     let percentage = null;
-    if( lastWidth < 7 ){
+    if( lastWidth < 7 && this.name_ === 'seekBar'){
       percentage = ((totalWidth - 7)/totalWidth * 100).toFixed(2) + '%';
     } else {
       percentage = (progress * 100).toFixed(2) + '%';
