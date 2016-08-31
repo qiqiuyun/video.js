@@ -16,7 +16,9 @@ import TextTrack from './tracks/text-track.js';
 import AudioTrack from './tracks/audio-track.js';
 import VideoTrack from './tracks/video-track.js';
 
-import { createTimeRanges } from './utils/time-ranges.js';
+import {
+    createTimeRanges
+} from './utils/time-ranges.js';
 import formatTime from './utils/format-time.js';
 import log from './utils/log.js';
 import * as Dom from './utils/dom.js';
@@ -33,9 +35,9 @@ import Flash from './tech/flash.js';
 
 // HTML5 Element Shim for IE8
 if (typeof HTMLVideoElement === 'undefined') {
-  document.createElement('video');
-  document.createElement('audio');
-  document.createElement('track');
+    document.createElement('video');
+    document.createElement('audio');
+    document.createElement('track');
 }
 
 /**
@@ -53,61 +55,61 @@ if (typeof HTMLVideoElement === 'undefined') {
  * @mixes videojs
  * @method videojs
  */
-let videojs = function(id, options, ready){
-  let tag; // Element of ID
+let videojs = function(id, options, ready) {
+    let tag; // Element of ID
 
-  // Allow for element or ID to be passed in
-  // String ID
-  if (typeof id === 'string') {
+    // Allow for element or ID to be passed in
+    // String ID
+    if (typeof id === 'string') {
 
-    // Adjust for jQuery ID syntax
-    if (id.indexOf('#') === 0) {
-      id = id.slice(1);
-    }
+        // Adjust for jQuery ID syntax
+        if (id.indexOf('#') === 0) {
+            id = id.slice(1);
+        }
 
-    // If a player instance has already been created for this ID return it.
-    if (videojs.getPlayers()[id]) {
+        // If a player instance has already been created for this ID return it.
+        if (videojs.getPlayers()[id]) {
 
-      // If options or ready funtion are passed, warn
-      if (options) {
-        log.warn(`Player "${id}" is already initialised. Options will not be applied.`);
-      }
+            // If options or ready funtion are passed, warn
+            if (options) {
+                log.warn(`Player "${id}" is already initialised. Options will not be applied.`);
+            }
 
-      if (ready) {
-        videojs.getPlayers()[id].ready(ready);
-      }
+            if (ready) {
+                videojs.getPlayers()[id].ready(ready);
+            }
 
-      return videojs.getPlayers()[id];
+            return videojs.getPlayers()[id];
 
-    // Otherwise get element for ID
+            // Otherwise get element for ID
+        } else {
+            tag = Dom.getEl(id);
+        }
+
+        // ID is a media element
     } else {
-      tag = Dom.getEl(id);
+        tag = id;
     }
 
-  // ID is a media element
-  } else {
-    tag = id;
-  }
+    // Check for a useable element
+    if (!tag || !tag.nodeName) { // re: nodeName, could be a box div also
+        throw new TypeError('The element or ID supplied is not valid. (videojs)'); // Returns
+    }
 
-  // Check for a useable element
-  if (!tag || !tag.nodeName) { // re: nodeName, could be a box div also
-    throw new TypeError('The element or ID supplied is not valid. (videojs)'); // Returns
-  }
-
-  // Element may have a player attr referring to an already created player instance.
-  // If not, set up a new player and return the instance.
-  return tag['player'] || Player.players[tag.playerId] || new Player(tag, options, ready);
+    // Element may have a player attr referring to an already created player instance.
+    // If not, set up a new player and return the instance.
+    return tag['player'] || Player.players[tag.playerId] || new Player(tag, options, ready);
 };
 
 // Add default styles
 if (window.VIDEOJS_NO_DYNAMIC_STYLE !== true) {
-  let style = Dom.$('.vjs-styles-defaults');
+    let style = Dom.$('.vjs-styles-defaults');
 
-  if (!style) {
-    style = stylesheet.createStyleElement('vjs-styles-defaults');
-    let head = Dom.$('head');
-    head.insertBefore(style, head.firstChild);
-    stylesheet.setTextContent(style, `
+    if (!style) {
+        style = stylesheet.createStyleElement('vjs-styles-defaults');
+        let head = Dom.$('head');
+        head.insertBefore(style, head.firstChild);
+        stylesheet.setTextContent(style, `
       .video-js {
         width: 300px;
         height: 150px;
@@ -117,7 +119,7 @@ if (window.VIDEOJS_NO_DYNAMIC_STYLE !== true) {
         padding-top: 56.25%
       }
     `);
-  }
+    }
 }
 
 // Run Auto-load players
@@ -202,11 +204,11 @@ videojs.getComponent = Component.getComponent;
  * @method registerComponent
  */
 videojs.registerComponent = (name, comp) => {
-  if (Tech.isTech(comp)) {
-    log.warn(`The ${name} tech was registered as a component. It should instead be registered using videojs.registerTech(name, tech)`);
-  }
+    if (Tech.isTech(comp)) {
+        log.warn(`The ${name} tech was registered as a component. It should instead be registered using videojs.registerTech(name, tech)`);
+    }
 
-  Component.registerComponent.call(Component, name, comp);
+    Component.registerComponent.call(Component, name, comp);
 };
 
 /**
@@ -410,9 +412,11 @@ videojs.plugin = plugin;
  * @mixes videojs
  * @method addLanguage
  */
-videojs.addLanguage = function(code, data){
-  code = ('' + code).toLowerCase();
-  return merge(videojs.options.languages, { [code]: data })[code];
+videojs.addLanguage = function(code, data) {
+    code = ('' + code).toLowerCase();
+    return merge(videojs.options.languages, {
+        [code]: data
+    })[code];
 };
 
 /**
@@ -722,11 +726,13 @@ videojs.insertContent = Dom.insertContent;
  * compiler compatible, so string keys are used.
  */
 if (typeof define === 'function' && define['amd']) {
-  define('videojs', [], function(){ return videojs; });
+    define('videojs', [], function() {
+        return videojs;
+    });
 
-// checking that module is an object too because of umdjs/umd#35
+    // checking that module is an object too because of umdjs/umd#35
 } else if (typeof exports === 'object' && typeof module === 'object') {
-  module['exports'] = videojs;
+    module['exports'] = videojs;
 }
 
 export default videojs;
