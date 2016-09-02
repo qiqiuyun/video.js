@@ -224,7 +224,7 @@ class Player extends Component {
     this.on('stageclick', this.handleStageClick_);
     //add double click handler parameters
     this.clickEventParams = {
-      'delay' : 400,
+      'delay' : 300,
       'clicks' : 0,
       'timer': null
     };
@@ -912,7 +912,7 @@ class Player extends Component {
    */
   handleTechSeeking_() {
     this.removeClass('vjs-paused');
-    this.addClass('vjs-seeking');
+    // this.addClass('vjs-seeking');
     this.trigger('seeking');
   }
 
@@ -923,7 +923,7 @@ class Player extends Component {
    * @method handleTechSeeked_
    */
   handleTechSeeked_() {
-    this.removeClass('vjs-seeking');
+    // this.removeClass('vjs-seeking');
     this.trigger('seeked');
   }
 
