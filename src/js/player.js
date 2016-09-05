@@ -1681,8 +1681,8 @@ class Player extends Component {
      this.techCall_('exitFullScreen');
     } else {
      this.exitFullWindow();
-     this.trigger('fullscreenchange');
     }
+    this.trigger('fullscreenchange');
 
     return this;
   }
