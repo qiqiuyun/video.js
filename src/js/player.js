@@ -1024,7 +1024,7 @@ class Player extends Component {
 
     } else {
         clearTimeout(this.clickEventParams.timer);
-        this.trigger('dblclick');
+        this.trigger('doubleclick');
         this.clickEventParams.clicks = 0;
     }
   }
@@ -1638,7 +1638,6 @@ class Player extends Component {
         this.isFullscreen(document[fsApi.fullscreenElement]);
 
         // If cancelling fullscreen, remove event listener.
-        this.isFullscreen(!this.isFullscreen());
         if (this.isFullscreen() === false) {
           Events.off(document, fsApi.fullscreenchange, documentFullscreenChange);
         }
