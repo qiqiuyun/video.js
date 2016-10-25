@@ -26,7 +26,7 @@ import * as browser from './utils/browser.js';
 import * as Url from './utils/url.js';
 import extendFn from './extend.js';
 import merge from 'lodash-compat/object/merge';
-import xhr from 'xhr';
+import xhr from './utils/xhr.js';
 
 // Include the built-in techs
 import Tech from './tech/tech.js';

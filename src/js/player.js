@@ -630,6 +630,8 @@ class Player extends Component {
     this.on(this.tech_, 'texttrackchange', this.handleTechTextTrackChange_);
     this.on(this.tech_, 'loadedmetadata', this.updateStyleEl_);
     this.on(this.tech_, 'posterchange', this.handleTechPosterChange_);
+    this.on(this.tech_, 'fromcache', this.handleTechDataFromecache_);
+    this.on(this.tech_, 'fromserver', this.handleTechDataFromeserver_);
 
     this.usingNativeControls(this.techGet_('controls'));
 
@@ -2138,6 +2140,27 @@ class Player extends Component {
       this.trigger('posterchange');
     }
   }
+
+  /**
+   * Handle the event when the data come from cache;
+   */
+  handleTechDataFromecache_(e){
+    this.trigger({
+      type:'fromcache',
+      datasize:e.datasize
+    });
+  }
+
+  /**
+   * Handle the event when the data come from server;
+   */
+  handleTechDataFromeserver_(e){
+    this.trigger({
+      type:'fromserver',
+      datasize:e.datasize
+    });
+  }
+  
 
   /**
    * Get or set whether or not the controls are showing.
