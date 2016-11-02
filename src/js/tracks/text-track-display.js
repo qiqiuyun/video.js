@@ -180,6 +180,7 @@ class TextTrackDisplay extends Component {
     }
 
     let overrides = this.player_['textTrackSettings'].getValues();
+    console.log(overrides);
 
     let cues = [];
     for (let i = 0; i < track['activeCues'].length; i++) {
@@ -233,6 +234,12 @@ class TextTrackDisplay extends Component {
         } else if (overrides.edgeStyle === 'uniform') {
           cueDiv.firstChild.style.textShadow = `0 0 4px ${darkGray}, 0 0 4px ${darkGray}, 0 0 4px ${darkGray}, 0 0 4px ${darkGray}`;
         }
+      }
+      if(overrides.backgroundPadding){
+        cueDiv.firstChild.style.padding = overrides.backgroundPadding;
+      }
+      if(overrides.backgroundBorderRadius){
+        cueDiv.firstChild.style.borderRadius = overrides.backgroundBorderRadius;
       }
       if (overrides.fontPercent && overrides.fontPercent !== 1) {
         const fontSize = window.parseFloat(cueDiv.style.fontSize);

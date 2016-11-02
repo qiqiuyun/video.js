@@ -97,6 +97,8 @@ class TextTrackSettings extends Component {
     const bgOpacity = getSelectedOptionValue(this.$('.vjs-bg-opacity > select'));
     const windowColor = getSelectedOptionValue(this.$('.window-color > select'));
     const windowOpacity = getSelectedOptionValue(this.$('.vjs-window-opacity > select'));
+    const backgroundPadding = getSelectedOptionValue(this.$('.bg-padding > select'));
+    const backgroundBorderRadius = getSelectedOptionValue(this.$('.vjs-bg-radius > select'));
     const fontPercent = window['parseFloat'](getSelectedOptionValue(this.$('.vjs-font-percent > select')));
 
     let result = {
@@ -108,7 +110,9 @@ class TextTrackSettings extends Component {
       'color': fgColor,
       'backgroundColor': bgColor,
       'windowColor': windowColor,
-      'fontPercent': fontPercent
+      'fontPercent': fontPercent,
+      'backgroundPadding': backgroundPadding,
+      'backgroundBorderRadius': backgroundBorderRadius
     };
     for (let name in result) {
       if (result[name] === '' || result[name] === 'none' || (name === 'fontPercent' && result[name] === 1.00)) {
@@ -281,9 +285,11 @@ function captionOptionsMenuTemplate() {
             <span class="vjs-bg-opacity vjs-opacity">
                 <select>
                   <option value="">---</option>
-                  <option value="1">Opaque</option>
-                  <option value="0.5">Semi-Transparent</option>
-                  <option value="0">Transparent</option>
+                  <option value="1">1</option>
+                  <option value="0.8">0.8</option>
+                  <option selected value="0.6">0.6</option>
+                  <option value="0.4">0.4</option>
+                  <option value="0">0</option>
                 </select>
             </span>
         </div> <!-- vjs-bg-color -->
@@ -306,6 +312,24 @@ function captionOptionsMenuTemplate() {
                   <option value="1">Opaque</option>
                   <option value="0.5">Semi-Transparent</option>
                   <option value="0">Transparent</option>
+                </select>
+            </span>
+        </div> <!-- vjs-bg-padding and radius -->
+        <div class="bg-padding vjs-tracksetting">
+            <label class="vjs-label">Window</label>
+            <select>
+              <option value="">---</option>
+              <option selected="selected" value="5px">5px</option>
+              <option value="10px">10px</option>
+              <option value="15px">15px</option>
+              <option value="20px">20px</option>
+            </select>
+            <span class="vjs-bg-radius vjs-radius">
+                <select>
+                  <option value="">---</option>
+                  <option value="2px">2px</option>
+                  <option selected="selected" value="4px">4px</option>
+                  <option value="6px">6px</option>
                 </select>
             </span>
         </div> <!-- vjs-window-color -->

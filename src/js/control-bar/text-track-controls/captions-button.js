@@ -62,7 +62,13 @@ class CaptionsButton extends TextTrackButton {
     let items = [];
 
     if (!(this.player().tech_ && this.player().tech_['featuresNativeTextTracks'])) {
-      items.push(new CaptionSettingsMenuItem(this.player_, { 'kind': this.kind_ }));
+      /**
+       * Delete the caption track style setting item
+       * Author: Chen Haijiao
+       * E-mail: chenhaijiao@howzhi.com
+       * Date: 2016-11-2
+       */
+      // items.push(new CaptionSettingsMenuItem(this.player_, { 'kind': this.kind_ }));
     }
 
     return super.createItems(items);
