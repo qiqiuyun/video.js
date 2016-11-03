@@ -180,7 +180,6 @@ class TextTrackDisplay extends Component {
     }
 
     let overrides = this.player_['textTrackSettings'].getValues();
-    console.log(overrides);
 
     let cues = [];
     for (let i = 0; i < track['activeCues'].length; i++) {

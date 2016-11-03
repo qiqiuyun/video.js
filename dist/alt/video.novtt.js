@@ -18098,7 +18098,6 @@ var TextTrackDisplay = (function (_Component) {
     }
 
     var overrides = this.player_['textTrackSettings'].getValues();
-    console.log(overrides);
 
     var cues = [];
     for (var _i = 0; _i < track['activeCues'].length; _i++) {
