@@ -16,7 +16,7 @@ videojs.addLanguage("zh-TW",{
  "Subtitles": "字幕",
  "subtitles off": "關閉字幕",
  "Captions": "內嵌字幕",
- "captions off": "關閉內嵌字幕",
+ "captions off": "關閉字幕",
  "Chapters": "章節",
  "You aborted the media playback": "影片播放已終止",
  "A network error caused the media download to fail part-way.": "網路錯誤導致影片下載失敗。",
