@@ -339,8 +339,8 @@ function captionOptionsMenuTemplate() {
           <label class="vjs-label">Font Size</label>
           <select>
             <option value="0.50">50%</option>
-            <option value="0.75">75%</option>
-            <option value="1.00" selected>100%</option>
+            <option value="0.75" selected>75%</option>
+            <option value="1.00">100%</option>
             <option value="1.25">125%</option>
             <option value="1.50">150%</option>
             <option value="1.75">175%</option>
