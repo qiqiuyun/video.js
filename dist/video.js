@@ -6793,7 +6793,7 @@ var CaptionsButton = (function (_TextTrackButton) {
    */
 
   CaptionsButton.prototype.update = function update() {
-    var threshold = 2;
+    var threshold = 1;
     _TextTrackButton.prototype.update.call(this);
 
     // if native, then threshold is 1 because no settings button
@@ -7454,9 +7454,6 @@ var TextTrackButton = (function (_TrackButton) {
   TextTrackButton.prototype.createItems = function createItems() {
     var items = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
-    // Add an OFF menu item to turn all tracks off
-    items.push(new _offTextTrackMenuItemJs2['default'](this.player_, { 'kind': this.kind_ }));
-
     var tracks = this.player_.textTracks();
 
     if (!tracks) {
@@ -7475,6 +7472,8 @@ var TextTrackButton = (function (_TrackButton) {
         }));
       }
     }
+    // Add an OFF menu item to turn all tracks off
+    items.push(new _offTextTrackMenuItemJs2['default'](this.player_, { 'kind': this.kind_ }));
 
     return items;
   };

@@ -37,7 +37,7 @@ class CaptionsButton extends TextTrackButton {
    * @method update
    */
   update() {
-    let threshold = 2;
+    let threshold = 1;
     super.update();
 
     // if native, then threshold is 1 because no settings button
