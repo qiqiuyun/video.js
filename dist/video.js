@@ -19012,7 +19012,7 @@ var TextTrack = (function (_Track) {
           return activeCues;
         }
 
-        var ct = this.tech_.currentTime();
+        var ct = this.tech_.currentTime() - settings.videoHeaderLength;
         var active = [];
 
         for (var i = 0, l = this.cues.length; i < l; i++) {
