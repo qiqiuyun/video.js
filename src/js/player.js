@@ -1636,7 +1636,7 @@ class Player extends Component {
       // when canceling fullscreen. Otherwise if there's multiple
       // players on a page, they would all be reacting to the same fullscreen
       // events
-      Events.one(document, fsApi.fullscreenchange, Fn.bind(this, function documentFullscreenChange(e){
+      Events.on(document, fsApi.fullscreenchange, Fn.bind(this, function documentFullscreenChange(e){
         this.isFullscreen(document[fsApi.fullscreenElement]);
 
         // If cancelling fullscreen, remove event listener.
