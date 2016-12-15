@@ -21547,246 +21547,6 @@ var isCrossOrigin = function isCrossOrigin(url) {
 exports.isCrossOrigin = isCrossOrigin;
 
 },{"global/document":7,"global/window":8}],152:[function(_dereq_,module,exports){
-'use strict';
-var window = _dereq_('global/window');
-var isFunction = _dereq_('is-function');
-var parseHeaders = _dereq_('parse-headers');
-var xtend = _dereq_('xtend');
-
-forEachArray(['get', 'put', 'post', 'patch', 'head', 'delete'], function (method) {
-    createXHR[method === 'delete' ? 'del' : method] = function (uri, options, callback) {
-        options = initParams(uri, options, callback);
-        options.method = method.toUpperCase();
-        return _createXHR(options);
-    };
-});
-
-function forEachArray(array, iterator) {
-    for (var i = 0; i < array.length; i++) {
-        iterator(array[i]);
-    }
-}
-
-function isEmpty(obj) {
-    for (var i in obj) {
-        if (obj.hasOwnProperty(i)) return false;
-    }
-    return true;
-}
-
-function initParams(uri, options, callback) {
-    var params = uri;
-
-    if (isFunction(options)) {
-        callback = options;
-        if (typeof uri === 'string') {
-            params = { uri: uri };
-        }
-    } else {
-        params = xtend(options, { uri: uri });
-    }
-
-    params.callback = callback;
-    return params;
-}
-
-function createXHR(uri, options, callback) {
-    options = initParams(uri, options, callback);
-    return _createXHR(options);
-}
-
-function _createXHR(options) {
-    if (typeof options.callback === 'undefined') {
-        throw new Error('callback argument missing');
-    }
-
-    var called = false;
-    var callback = function cbOnce(err, response, body) {
-        if (!called) {
-            called = true;
-            options.callback(err, response, body);
-        }
-    };
-
-    function readystatechange() {
-        if (xhr.readyState === 4) {
-            loadFunc();
-        }
-    }
-
-    function getBody() {
-        // Chrome with requestType=blob throws errors arround when even testing access to responseText
-        var body;
-
-        if (xhr.response) {
-            body = xhr.response;
-        } else {
-            body = xhr.responseText || getXml(xhr);
-        }
-
-        if (isJson) {
-            try {
-                body = JSON.parse(body);
-            } catch (e) {}
-        }
-
-        return body;
-    }
-
-    var failureResponse = {
-        body: undefined,
-        headers: {},
-        statusCode: 0,
-        method: method,
-        url: uri,
-        rawRequest: xhr
-    };
-
-    function errorFunc(evt) {
-        clearTimeout(timeoutTimer);
-        if (!(evt instanceof Error)) {
-            evt = new Error('' + (evt || 'Unknown XMLHttpRequest Error'));
-        }
-        evt.statusCode = 0;
-        return callback(evt, failureResponse);
-    }
-
-    // will load the data & process the response in a special response object
-    function loadFunc() {
-        if (aborted) return;
-        var status;
-        clearTimeout(timeoutTimer);
-        if (options.useXDR && xhr.status === undefined) {
-            //IE8 CORS GET successful response doesn't have a status field, but body is fine
-            status = 200;
-        } else {
-            status = xhr.status === 1223 ? 204 : xhr.status;
-        }
-        var response = failureResponse;
-        var err = null;
-
-        if (status !== 0) {
-            response = {
-                body: getBody(),
-                statusCode: status,
-                method: method,
-                headers: {},
-                url: uri,
-                rawRequest: xhr
-            };
-            if (xhr.getAllResponseHeaders) {
-                //remember xhr can in fact be XDR for CORS in IE
-                response.headers = parseHeaders(xhr.getAllResponseHeaders());
-            }
-        } else {
-            err = new Error('Internal XMLHttpRequest Error');
-        }
-        return callback(err, response, response.body);
-    }
-
-    var xhr = options.xhr || null;
-
-    if (!xhr) {
-        if (options.cors || options.useXDR) {
-            xhr = new createXHR.XDomainRequest();
-        } else {
-            xhr = new createXHR.XMLHttpRequest();
-        }
-    }
-
-    var key;
-    var aborted;
-    var uri = xhr.url = options.uri || options.url;
-    var method = xhr.method = options.method || 'GET';
-    var body = options.body || options.data || null;
-    var headers = xhr.headers = options.headers || {};
-    var sync = !!options.sync;
-    var isJson = false;
-    var timeoutTimer;
-
-    if ('json' in options) {
-        isJson = true;
-        headers['accept'] || headers['Accept'] || (headers['Accept'] = 'application/json'); //Don't override existing accept header declared by user
-        if (method !== 'GET' && method !== 'HEAD') {
-            headers['content-type'] || headers['Content-Type'] || (headers['Content-Type'] = 'application/json'); //Don't override existing accept header declared by user
-            body = JSON.stringify(options.json);
-        }
-    }
-
-    xhr.onreadystatechange = readystatechange;
-    xhr.onload = loadFunc;
-    xhr.onerror = errorFunc;
-    // IE9 must have onprogress be set to a unique function.
-    xhr.onprogress = function () {
-        // IE must die
-        if (!xhr.ipNumber) {
-            xhr.ipNumber = 1;
-        } else {
-            xhr.ipNumber++;
-        }
-    };
-    xhr.ontimeout = errorFunc;
-    xhr.open(method, uri, !sync, options.username, options.password);
-    //has to be after open
-    if (!sync) {
-        xhr.withCredentials = !!options.withCredentials;
-    }
-    // Cannot set timeout with sync request
-    // not setting timeout on the xhr object, because of old webkits etc. not handling that correctly
-    // both npm's request and jquery 1.x use this kind of timeout, so this is being consistent
-    if (!sync && options.timeout > 0) {
-        timeoutTimer = setTimeout(function () {
-            aborted = true; //IE9 may still call readystatechange
-            xhr.abort('timeout');
-            var e = new Error('XMLHttpRequest timeout');
-            e.code = 'ETIMEDOUT';
-            errorFunc(e);
-        }, options.timeout);
-    }
-
-    if (xhr.setRequestHeader) {
-        for (key in headers) {
-            if (headers.hasOwnProperty(key)) {
-                xhr.setRequestHeader(key, headers[key]);
-            }
-        }
-    } else if (options.headers && !isEmpty(options.headers)) {
-        throw new Error('Headers cannot be set on an XDomainRequest object');
-    }
-
-    if ('responseType' in options) {
-        xhr.responseType = options.responseType;
-    }
-
-    if ('beforeSend' in options && typeof options.beforeSend === 'function') {
-        options.beforeSend(xhr);
-    }
-
-    xhr.send(body);
-
-    return xhr;
-}
-
-function getXml(xhr) {
-    if (xhr.responseType === 'document') {
-        return xhr.responseXML;
-    }
-    var firefoxBugTakenEffect = xhr.status === 204 && xhr.responseXML && xhr.responseXML.documentElement.nodeName === 'parsererror';
-    if (xhr.responseType === '' && !firefoxBugTakenEffect) {
-        return xhr.responseXML;
-    }
-
-    return null;
-}
-
-function noop() {}
-
-createXHR.XMLHttpRequest = window.XMLHttpRequest || noop;
-createXHR.XDomainRequest = 'withCredentials' in new createXHR.XMLHttpRequest() ? createXHR.XMLHttpRequest : window.XDomainRequest;
-
-module.exports = createXHR;
-
-},{"global/window":8,"is-function":9,"parse-headers":56,"xtend":61}],153:[function(_dereq_,module,exports){
 /**
  * @file video.js
  */
@@ -21884,9 +21644,9 @@ var _lodashCompatObjectMerge = _dereq_('lodash-compat/object/merge');
 
 var _lodashCompatObjectMerge2 = _interopRequireDefault(_lodashCompatObjectMerge);
 
-var _utilsXhrJs = _dereq_('./utils/xhr.js');
+var _xhr = _dereq_('xhr');
 
-var _utilsXhrJs2 = _interopRequireDefault(_utilsXhrJs);
+var _xhr2 = _interopRequireDefault(_xhr);
 
 // Include the built-in techs
 
@@ -22401,7 +22161,7 @@ videojs.trigger = Events.trigger;
  * @return {XMLHttpRequest|XDomainRequest} the request object.
  * @see https://github.com/Raynos/xhr
  */
-videojs.xhr = _utilsXhrJs2['default'];
+videojs.xhr = _xhr2['default'];
 
 /**
  * TextTrack class
@@ -22601,7 +22361,7 @@ if (typeof define === 'function' && define['amd']) {
 exports['default'] = videojs;
 module.exports = exports['default'];
 
-},{"../../src/js/utils/merge-options.js":147,"./component":66,"./event-target":103,"./extend.js":104,"./player":112,"./plugins.js":113,"./setup":117,"./tech/flash.js":120,"./tech/html5.js":121,"./tech/tech.js":123,"./tracks/audio-track.js":125,"./tracks/text-track.js":133,"./tracks/video-track.js":138,"./utils/browser.js":139,"./utils/dom.js":141,"./utils/events.js":142,"./utils/fn.js":143,"./utils/format-time.js":144,"./utils/log.js":146,"./utils/stylesheet.js":148,"./utils/time-ranges.js":149,"./utils/url.js":151,"./utils/xhr.js":152,"global/document":7,"global/window":8,"lodash-compat/object/merge":46}]},{},[153])(153)
+},{"../../src/js/utils/merge-options.js":147,"./component":66,"./event-target":103,"./extend.js":104,"./player":112,"./plugins.js":113,"./setup":117,"./tech/flash.js":120,"./tech/html5.js":121,"./tech/tech.js":123,"./tracks/audio-track.js":125,"./tracks/text-track.js":133,"./tracks/video-track.js":138,"./utils/browser.js":139,"./utils/dom.js":141,"./utils/events.js":142,"./utils/fn.js":143,"./utils/format-time.js":144,"./utils/log.js":146,"./utils/stylesheet.js":148,"./utils/time-ranges.js":149,"./utils/url.js":151,"global/document":7,"global/window":8,"lodash-compat/object/merge":46,"xhr":60}]},{},[152])(152)
 });
 
 
