@@ -13896,7 +13896,8 @@ var Slider = (function (_Component) {
     // var progress =  (this.player_.scrubbing()) ? this.player_.getCache().currentTime / this.player_.duration() : this.player_.currentTime() / this.player_.duration();
     var progress = this.getPercent();
     var bar = this.bar;
-    var totalWidth = parseInt(_globalWindow2['default'].getComputedStyle(bar.el().parentNode, null).width);
+    // let totalWidth = parseInt(window.getComputedStyle(bar.el().parentNode,null).width);
+    var totalWidth = this.currentDimension('width');
     var lastWidth = totalWidth * (1 - progress);
 
     // If there's no bar...

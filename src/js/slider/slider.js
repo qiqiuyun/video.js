@@ -127,7 +127,8 @@ class Slider extends Component {
     // var progress =  (this.player_.scrubbing()) ? this.player_.getCache().currentTime / this.player_.duration() : this.player_.currentTime() / this.player_.duration();
     let progress = this.getPercent();
     let bar = this.bar;
-    let totalWidth = parseInt(window.getComputedStyle(bar.el().parentNode,null).width);
+    // let totalWidth = parseInt(window.getComputedStyle(bar.el().parentNode,null).width);
+    let totalWidth = this.currentDimension('width');
     let lastWidth = totalWidth * (1 - progress);
 
     // If there's no bar...
