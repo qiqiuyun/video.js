@@ -30,7 +30,4 @@ test/coverage/*
 
 .idea/
 
-dist/alt/video.novtt.js
-dist/alt/video.novtt.min.js
-dist/alt/video.novtt.min.js.map
-dist/video-js-1.0.27.zip
+dist/
