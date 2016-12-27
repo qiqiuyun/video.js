@@ -867,7 +867,6 @@ class Player extends Component {
     this.removeClass('vjs-playing');
     this.addClass('vjs-waiting');
     this.trigger('waiting');
-    this.one('timeupdate', () => this.removeClass('vjs-waiting'));
   }
 
   /**
