@@ -57,7 +57,7 @@ ControlBar.prototype.options_ = {
     'progressControl',
     'customControlSpacer',
     'fullscreenToggle',
-    'captionsButton',
+    // 'captionsButton',
     'playbackRateMenuButton',
     'volumeMenuButton',
   ]
