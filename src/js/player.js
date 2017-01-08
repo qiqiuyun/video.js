@@ -421,11 +421,11 @@ class Player extends Component {
 
     this.on('fullscreenchange', this.handleFullscreenChange_);
     this.on('stageclick', this.handleStageClick_);
-    //add double click handler parameters
+    // add double click handler parameters
     this.clickEventParams = {
-      'delay' : 300,
-      'clicks' : 0,
-      'timer': null
+      delay: 300,
+      clicks: 0,
+      timer: null
     };
   }
 

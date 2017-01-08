@@ -3,7 +3,7 @@
  */
 import TextTrackButton from './text-track-button.js';
 import Component from '../../component.js';
-import CaptionSettingsMenuItem from './caption-settings-menu-item.js';
+// import CaptionSettingsMenuItem from './caption-settings-menu-item.js';
 
 /**
  * The button component for toggling and selecting captions
@@ -51,6 +51,7 @@ class CaptionsButton extends TextTrackButton {
    */
   update() {
     let threshold = 1;
+
     super.update();
 
     // if native, then threshold is 1 because no settings button
@@ -74,7 +75,7 @@ class CaptionsButton extends TextTrackButton {
   createItems() {
     const items = [];
 
-    if (!(this.player().tech_ && this.player().tech_['featuresNativeTextTracks'])) {
+    if (!(this.player().tech_ && this.player().tech_.featuresNativeTextTracks)) {
       /**
        * Delete the caption track style setting item
        * Author: Chen Haijiao

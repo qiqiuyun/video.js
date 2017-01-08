@@ -28,14 +28,14 @@ class MouseTimeDisplay extends Component {
     super(player, options);
 
     if (options.playerOptions &&
-        options.playerOptions.controlBar &&
-        options.playerOptions.controlBar.progressControl &&
-        options.playerOptions.controlBar.progressControl.keepTooltipsInside) {
+      options.playerOptions.controlBar &&
+      options.playerOptions.controlBar.progressControl &&
+      options.playerOptions.controlBar.progressControl.keepTooltipsInside) {
       this.keepTooltipsInside = options.playerOptions.controlBar.progressControl.keepTooltipsInside;
     }
 
     if (this.keepTooltipsInside) {
-      this.tooltip = Dom.createEl('div', {className: 'vjs-time-tooltip'});
+      this.tooltip = Dom.createEl('div', { className: 'vjs-time-tooltip' });
       this.el().appendChild(this.tooltip);
       this.addClass('vjs-keep-tooltips-inside');
     }
@@ -68,13 +68,14 @@ class MouseTimeDisplay extends Component {
    * @listen mousemove
    */
   handleMouseMove(event) {
-    let duration = this.player_.duration();
-    let newTime = this.calculateDistance(event) * duration;
+    const duration = this.player_.duration();
+    const newTime = this.calculateDistance(event) * duration;
+    const basePosition = event.pageX - Dom.findElPosition(this.el().parentNode).left;
     let position = 0;
-    let basePosition = event.pageX - Dom.findElPosition(this.el().parentNode).left;
-    if(event.pageX < 25) {
+
+    if (event.pageX < 25) {
       position = 25;
-    }else if(event.pageX>this.el().parentNode.offsetWidth - 25) {
+    } else if (event.pageX > this.el().parentNode.offsetWidth - 25) {
       position = this.el().parentNode.offsetWidth - 25;
     } else {
       position = basePosition;

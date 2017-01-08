@@ -64,7 +64,7 @@ ControlBar.prototype.options_ = {
     'fullscreenToggle',
     // 'captionsButton',
     'playbackRateMenuButton',
-    'volumeMenuButton',
+    'volumeMenuButton'
   ]
 };
 
