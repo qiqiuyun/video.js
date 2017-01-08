@@ -1350,7 +1350,7 @@ class Player extends Component {
 
     this.clickEventParams.clicks++;
     if (this.clickEventParams.clicks === 1) {
-      this.clickEventParams.timer = (() => {
+      this.clickEventParams.timer = setTimeout(() => {
         if (this.controls()) {
           if (this.paused()) {
             this.play();
