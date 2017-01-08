@@ -1097,7 +1097,7 @@ class Component {
   dimension(widthOrHeight, num, skipListeners) {
     if (num !== undefined) {
       // Set to zero if null or literally NaN (NaN !== NaN)
-      if (num === null || num !== num) {
+      if (num === null) {
         num = 0;
       }
 
@@ -1142,7 +1142,6 @@ class Component {
 
     // No px so using % or no style was set, so falling back to offsetWidth/height
     // If component has display:none, offset will return 0
-    // TODO: handle display:none and no dimension style using px
     return parseInt(this.el_['offset' + toTitleCase(widthOrHeight)], 10);
   }
 
@@ -1297,7 +1296,6 @@ class Component {
       couldBeTap = false;
     };
 
-    // TODO: Listen to the original target. http://youtu.be/DujfpXOKUp8?t=13m8s
     this.on('touchleave', noTap);
     this.on('touchcancel', noTap);
 

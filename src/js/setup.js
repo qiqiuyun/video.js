@@ -114,6 +114,7 @@ if (Dom.isReal() && document.readyState === 'complete') {
 
 /**
  * check if the document has been loaded
+ * @return {Boolean} [description]
  */
 const hasLoaded = function() {
   return _windowLoaded;

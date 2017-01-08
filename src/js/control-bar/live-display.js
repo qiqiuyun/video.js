@@ -4,8 +4,6 @@
 import Component from '../component';
 import * as Dom from '../utils/dom.js';
 
-// TODO - Future make it click to snap to live
-
 /**
  * Displays the live indicator when duration is Infinity.
  *

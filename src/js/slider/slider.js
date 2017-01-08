@@ -1,7 +1,6 @@
 /**
  * @file slider.js
  */
-import window from 'global/window';
 import Component from '../component.js';
 import * as Dom from '../utils/dom.js';
 import {assign} from '../utils/obj';
@@ -169,10 +168,9 @@ class Slider extends Component {
     // On HTML5 browsers scrubbing is really smooth, but some flash players are slow, so we might want to utilize this later.
     // var progress =  (this.player_.scrubbing()) ? this.player_.getCache().currentTime / this.player_.duration() : this.player_.currentTime() / this.player_.duration();
     let progress = this.getPercent();
-    let bar = this.bar;
-    // let totalWidth = parseInt(window.getComputedStyle(bar.el().parentNode,null).width);
-    let totalWidth = this.currentDimension('width');
-    let lastWidth = totalWidth * (1 - progress);
+    const bar = this.bar;
+    const totalWidth = this.currentDimension('width');
+    const lastWidth = totalWidth * (1 - progress);
 
     // If there's no bar...
     if (!bar) {
@@ -181,7 +179,6 @@ class Slider extends Component {
 
     // Protect against no duration and other division issues
     if (typeof progress !== 'number' ||
-        progress !== progress ||
         progress < 0 ||
         progress === Infinity) {
       progress = 0;
@@ -189,8 +186,9 @@ class Slider extends Component {
 
     // Convert to a percentage for setting
     let percentage = null;
-    if( lastWidth < 7 && this.name_ === 'seekBar'){
-      percentage = ((totalWidth - 7)/totalWidth * 100).toFixed(2) + '%';
+
+    if (lastWidth < 7 && this.name_ === 'seekBar') {
+      percentage = ((totalWidth - 7) / totalWidth * 100).toFixed(2) + '%';
     } else {
       percentage = (progress * 100).toFixed(2) + '%';
     }
@@ -266,7 +264,6 @@ class Slider extends Component {
    *
    * @listens blur
    */
-
   handleBlur() {
     this.off(this.bar.el_.ownerDocument, 'keydown', this.handleKeyPress);
   }

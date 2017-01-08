@@ -43,7 +43,6 @@ class Menu extends Component {
     this.addChild(component);
     component.on('click', Fn.bind(this, function(event) {
       this.unlockShowing();
-      // TODO: Need to set keyboard focus back to the menuButton
     }));
   }
 

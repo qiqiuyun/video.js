@@ -277,8 +277,8 @@ class TextTrack extends Track {
           return activeCues;
         }
 
-        let ct = this.tech_.currentTime() - settings.videoHeaderLength;
-        let active = [];
+        const ct = this.tech_.currentTime() - settings.videoHeaderLength;
+        const active = [];
 
         for (let i = 0, l = this.cues.length; i < l; i++) {
           const cue = this.cues[i];

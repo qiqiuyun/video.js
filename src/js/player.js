@@ -1,7 +1,7 @@
 /**
  * @file player.js
  */
- // Subclasses Component
+// Subclasses Component
 import Component from './component.js';
 
 import document from 'global/document';
@@ -19,7 +19,7 @@ import * as stylesheet from './utils/stylesheet.js';
 import FullscreenApi from './fullscreen-api.js';
 import MediaError from './media-error.js';
 import safeParseTuple from 'safe-json-parse/tuple';
-import {assign} from './utils/obj';
+import { assign } from './utils/obj';
 import mergeOptions from './utils/merge-options.js';
 import textTrackConverter from './tracks/text-track-list-converter.js';
 import ModalDialog from './modal-dialog';
@@ -296,11 +296,11 @@ class Player extends Component {
     // if the global option object was accidentally blown away by
     // someone, bail early with an informative error
     if (!this.options_ ||
-        !this.options_.techOrder ||
-        !this.options_.techOrder.length) {
+      !this.options_.techOrder ||
+      !this.options_.techOrder.length) {
       throw new Error('No techOrder specified. Did you overwrite ' +
-                      'videojs.options instead of just changing the ' +
-                      'properties you want to override?');
+        'videojs.options instead of just changing the ' +
+        'properties you want to override?');
     }
 
     // Store the original tag used to set options
@@ -399,7 +399,6 @@ class Player extends Component {
       this.addClass('vjs-no-flex');
     }
 
-    // TODO: Make this smarter. Toggle user state between touching/mousing
     // using events, since devices can have both touch and mouse events.
     // if (browser.TOUCH_ENABLED) {
     //   this.addClass('vjs-touch-enabled');
@@ -1058,7 +1057,6 @@ class Player extends Component {
    * @private
    */
   handleTechLoadStart_() {
-    // TODO: Update to use `emptied` event instead. See #1277.
 
     this.removeClass('vjs-ended');
     this.removeClass('vjs-seeking');
@@ -1346,25 +1344,27 @@ class Player extends Component {
   handleTechClick_(event) {
     // We're using mousedown to detect clicks thanks to Flash, but mousedown
     // will also be triggered with right-clicks, so we need to prevent that
-    if (event.button !== 0) return;
-    let thiz = this;
+    if (event.button !== 0) {
+      return;
+    }
+
     this.clickEventParams.clicks++;
-    if(this.clickEventParams.clicks === 1) {
-        this.clickEventParams.timer = setTimeout(function() {
-          if (thiz.controls()) {
-            if (thiz.paused()) {
-              thiz.play();
-            } else {
-              thiz.pause();
-            }
+    if (this.clickEventParams.clicks === 1) {
+      this.clickEventParams.timer = (() => {
+        if (this.controls()) {
+          if (this.paused()) {
+            this.play();
+          } else {
+            this.pause();
           }
-          thiz.clickEventParams.clicks = 0;
-        }, this.clickEventParams.delay);
+        }
+        this.clickEventParams.clicks = 0;
+      }, this.clickEventParams.delay);
 
     } else {
-        clearTimeout(this.clickEventParams.timer);
-        this.trigger('doubleclick');
-        this.clickEventParams.clicks = 0;
+      clearTimeout(this.clickEventParams.timer);
+      this.trigger('doubleclick');
+      this.clickEventParams.clicks = 0;
     }
   }
 
@@ -1530,7 +1530,7 @@ class Player extends Component {
         this[method](arg);
       }, true);
 
-    // Otherwise call method now
+      // Otherwise call method now
     } else {
       try {
         if (this.tech_) {
@@ -1567,7 +1567,7 @@ class Player extends Component {
         if (this.tech_[method] === undefined) {
           log(`Video.js: ${method} method not defined for ${this.techName_} playback technology.`, e);
 
-        // When a method isn't available on the object it throws a TypeError
+          // When a method isn't available on the object it throws a TypeError
         } else if (e.name === 'TypeError') {
           log(`Video.js: ${method} unavailable on ${this.techName_} playback technology element.`, e);
           this.tech_.isReady_ = false;
@@ -2099,23 +2099,23 @@ class Player extends Component {
     // current platform
     const techs =
       this.options_.techOrder
-        .map(toTitleCase)
-        .map((techName) => {
-          // `Component.getComponent(...)` is for support of old behavior of techs
-          // being registered as components.
-          // Remove once that deprecated behavior is removed.
-          return [techName, Tech.getTech(techName) || Component.getComponent(techName)];
-        })
-        .filter(([techName, tech]) => {
-          // Check if the current tech is defined before continuing
-          if (tech) {
-            // Check if the browser supports this technology
-            return tech.isSupported();
-          }
+      .map(toTitleCase)
+      .map((techName) => {
+        // `Component.getComponent(...)` is for support of old behavior of techs
+        // being registered as components.
+        // Remove once that deprecated behavior is removed.
+        return [techName, Tech.getTech(techName) || Component.getComponent(techName)];
+      })
+      .filter(([techName, tech]) => {
+        // Check if the current tech is defined before continuing
+        if (tech) {
+          // Check if the browser supports this technology
+          return tech.isSupported();
+        }
 
-          log.error(`The "${techName}" tech is undefined. Skipped browser support check for that tech.`);
-          return false;
-        });
+        log.error(`The "${techName}" tech is undefined. Skipped browser support check for that tech.`);
+        return false;
+      });
 
     // Iterate over each `innerArray` element once per `outerArray` element and execute
     // `tester` with both. If `tester` returns a non-falsy value, exit early and return
@@ -2140,7 +2140,7 @@ class Player extends Component {
     const flip = (fn) => (a, b) => fn(b, a);
     const finder = ([techName, tech], source) => {
       if (tech.canPlaySource(source, this.options_[techName.toLowerCase()])) {
-        return {source, tech: techName};
+        return { source, tech: techName };
       }
     };
 
@@ -2188,12 +2188,12 @@ class Player extends Component {
     if (Array.isArray(source)) {
       this.sourceList_(source);
 
-    // case: URL String (http://myvideo...)
+      // case: URL String (http://myvideo...)
     } else if (typeof source === 'string') {
       // create a source object from the string
       this.src({ src: source });
 
-    // case: Source object { src: '', type: '' ... }
+      // case: Source object { src: '', type: '' ... }
     } else if (source instanceof Object) {
       // check if the source has a type and the loaded tech cannot play the source
       // if there's no type we'll just try the current tech
@@ -2229,7 +2229,7 @@ class Player extends Component {
             this.play();
           }
 
-        // Set the source synchronously if possible (#2326)
+          // Set the source synchronously if possible (#2326)
         }, true);
       }
     }
@@ -2473,27 +2473,6 @@ class Player extends Component {
       this.trigger('posterchange');
     }
   }
-
-  /**
-   * Handle the event when the data come from cache;
-   */
-  handleTechDataFromecache_(e){
-    this.trigger({
-      type:'fromcache',
-      datasize:e.datasize
-    });
-  }
-
-  /**
-   * Handle the event when the data come from server;
-   */
-  handleTechDataFromeserver_(e){
-    this.trigger({
-      type:'fromserver',
-      datasize:e.datasize
-    });
-  }
-  
 
   /**
    * Get or set whether or not the controls are showing.
@@ -3012,7 +2991,7 @@ class Player extends Component {
    * @return {undefined}
    *         does not return anything
    */
-  removeRemoteTextTrack({track = arguments[0]} = {}) {
+  removeRemoteTextTrack({ track = arguments[0] } = {}) {
     // destructure the input into an object with a track argument, defaulting to arguments[0]
     // default the whole argument to an empty object if nothing was passed in
 
@@ -3207,11 +3186,11 @@ class Player extends Component {
     // Note: We don't actually use flexBasis (or flexOrder), but it's one of the more
     // common flex features that we can rely on when checking for flex support.
     return !('flexBasis' in elem.style ||
-            'webkitFlexBasis' in elem.style ||
-            'mozFlexBasis' in elem.style ||
-            'msFlexBasis' in elem.style ||
-            // IE10-specific (2012 flex spec)
-            'msFlexOrder' in elem.style);
+      'webkitFlexBasis' in elem.style ||
+      'mozFlexBasis' in elem.style ||
+      'msFlexBasis' in elem.style ||
+      // IE10-specific (2012 flex spec)
+      'msFlexOrder' in elem.style);
   }
 }
 

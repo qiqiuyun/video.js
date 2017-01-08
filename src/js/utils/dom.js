@@ -664,18 +664,6 @@ export function getPointerPosition(el, event) {
   const boxW = el.offsetWidth;
   const boxH = el.offsetHeight;
 
-  let boxY = box.top;
-  let boxX = box.left;
-  if (document.msFullscreenElement && window.top !== window  && el.offsetWidth < el.clientWidth 
-     && el.getBoundingClientRect().width < 100) {
-
-    // IE 11 fix: inside an iframe + invalid offsetWidth + invalid getBoundingClientRect()
-    boxW = Math.round(el.getBoundingClientRect().width * 100);
-    boxH = Math.round(el.getBoundingClientRect().height * 100);
-    boxX = Math.round(el.getBoundingClientRect().left*100);
-    boxY = Math.round(el.getBoundingClientRect().top*100);
-   
-  }
   const boxY = box.top;
   const boxX = box.left;
   let pageY = event.pageY;

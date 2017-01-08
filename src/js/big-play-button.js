@@ -39,7 +39,8 @@ class BigPlayButton extends Button {
 }
 
 /**
- * The text that should display over the `BigPlayButton`s controls. Added to for localization.
+ * The text that should display over the `BigPlayButton`s controls.
+ * Added to for localization.
  *
  * @type {string}
  * @private

@@ -52,7 +52,9 @@ class VolumeMenuButton extends PopupButton {
     this.on(player, 'volumechange', this.volumeUpdate);
     this.on(player, 'loadstart', this.volumeUpdate);
 
-    // hide mute toggle if the current tech doesn't support volume control
+    /**
+     * hide mute toggle if the current tech doesn't support volume control
+     */
     function updateVisibility() {
       if (player.tech_ && player.tech_.featuresVolumeControl === false) {
         this.addClass('vjs-hidden');

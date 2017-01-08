@@ -109,7 +109,7 @@ class TextTrackDisplay extends Component {
         this.player_.addRemoteTextTrack(tracks[i], true);
       }
 
-      const modes = {captions: 1, subtitles: 1};
+      const modes = { captions: 1, subtitles: 1 };
       const trackList = this.player_.textTracks();
       let firstDesc;
       let firstCaptions;
@@ -266,24 +266,24 @@ class TextTrackDisplay extends Component {
       }
       if (overrides.textOpacity) {
         tryUpdateStyle(cueDiv.firstChild,
-                       'color',
-                       constructColor(overrides.color || '#fff',
-                                      overrides.textOpacity));
+          'color',
+          constructColor(overrides.color || '#fff',
+            overrides.textOpacity));
       }
       if (overrides.backgroundColor) {
         cueDiv.firstChild.style.backgroundColor = overrides.backgroundColor;
       }
       if (overrides.backgroundOpacity) {
         tryUpdateStyle(cueDiv.firstChild,
-                       'backgroundColor',
-                       constructColor(overrides.backgroundColor || '#000',
-                                      overrides.backgroundOpacity));
+          'backgroundColor',
+          constructColor(overrides.backgroundColor || '#000',
+            overrides.backgroundOpacity));
       }
       if (overrides.windowColor) {
         if (overrides.windowOpacity) {
           tryUpdateStyle(cueDiv,
-                         'backgroundColor',
-                         constructColor(overrides.windowColor, overrides.windowOpacity));
+            'backgroundColor',
+            constructColor(overrides.windowColor, overrides.windowOpacity));
         } else {
           cueDiv.style.backgroundColor = overrides.windowColor;
         }
@@ -299,10 +299,10 @@ class TextTrackDisplay extends Component {
           cueDiv.firstChild.style.textShadow = `0 0 4px ${darkGray}, 0 0 4px ${darkGray}, 0 0 4px ${darkGray}, 0 0 4px ${darkGray}`;
         }
       }
-      if(overrides.backgroundPadding){
+      if (overrides.backgroundPadding) {
         cueDiv.firstChild.style.padding = overrides.backgroundPadding;
       }
-      if(overrides.backgroundBorderRadius){
+      if (overrides.backgroundBorderRadius) {
         cueDiv.firstChild.style.borderRadius = overrides.backgroundBorderRadius;
       }
       if (overrides.fontPercent && overrides.fontPercent !== 1) {

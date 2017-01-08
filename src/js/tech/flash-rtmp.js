@@ -5,11 +5,7 @@
 
 /**
  * Add RTMP properties to the {@link Flash} Tech.
- *
- * @param {Flash} Flash
- *        The flash tech class.
- *
- * @mixin FlashRtmpDecorator
+ * @param {Flash} Flash The flash tech class.
  */
 function FlashRtmpDecorator(Flash) {
   Flash.streamingFormats = {
@@ -19,12 +15,9 @@ function FlashRtmpDecorator(Flash) {
 
   /**
    * Join connection and stream with an ampersand.
-   *
-   * @param {string} connection
-   *        The connection string.
-   *
-   * @param {string} stream
-   *        The stream string.
+   * @param  {string} connection The connection string.
+   * @param  {string} stream     The stream string.
+   * @return {[type]}            [description]
    */
   Flash.streamFromParts = function(connection, stream) {
     return connection + '&' + stream;
