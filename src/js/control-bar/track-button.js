@@ -6,17 +6,23 @@ import Component from '../component.js';
 import * as Fn from '../utils/fn.js';
 
 /**
- * The base class for buttons that toggle specific text track types (e.g. subtitles)
+ * The base class for buttons that toggle specific  track types (e.g. subtitles).
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuButton
- * @class TrackButton
  */
 class TrackButton extends MenuButton {
 
-  constructor(player, options){
-    let tracks = options.tracks;
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
+  constructor(player, options) {
+    const tracks = options.tracks;
 
     super(player, options);
 
@@ -28,7 +34,8 @@ class TrackButton extends MenuButton {
       return;
     }
 
-    let updateHandler = Fn.bind(this, this.update);
+    const updateHandler = Fn.bind(this, this.update);
+
     tracks.addEventListener('removetrack', updateHandler);
     tracks.addEventListener('addtrack', updateHandler);
 

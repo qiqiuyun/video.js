@@ -3,20 +3,25 @@
  */
 import Component from '../../component.js';
 import * as Fn from '../../utils/fn.js';
-import * as Dom from '../../utils/dom.js';
 import formatTime from '../../utils/format-time.js';
 
 /**
  * Shows play progress
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class PlayProgressBar
  */
 class PlayProgressBar extends Component {
 
-  constructor(player, options){
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
+  constructor(player, options) {
     super(player, options);
     this.updateDataAttr();
     this.on(player, 'timeupdate', this.updateDataAttr);
@@ -35,10 +40,10 @@ class PlayProgressBar extends Component {
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   createEl() {
     return super.createEl('div', {
@@ -47,8 +52,17 @@ class PlayProgressBar extends Component {
     });
   }
 
-  updateDataAttr() {
-    let time = (this.player_.scrubbing()) ? this.player_.getCache().currentTime : this.player_.currentTime();
+  /**
+   * Update the data-current-time attribute on the `PlayProgressBar`.
+   *
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` event that caused this to run.
+   *
+   * @listens Player#timeupdate
+   */
+  updateDataAttr(event) {
+    const time = (this.player_.scrubbing()) ? this.player_.getCache().currentTime : this.player_.currentTime();
+
     this.el_.setAttribute('data-current-time', formatTime(time, this.player_.duration()));
   }
 

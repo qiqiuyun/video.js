@@ -1,8 +1,12 @@
 import {gruntCustomizer, gruntOptionsMaker} from './options-customizer.js';
+import chg from 'chg';
+import npmRun from 'npm-run';
+import isDocsOnly from './docs-only.js';
+
 module.exports = function(grunt) {
   require('time-grunt')(grunt);
 
-  let _ = require('lodash-compat');
+  let _ = require('lodash');
   let pkg = grunt.file.readJSON('package.json');
   let license = grunt.file.read('build/license-header.txt');
   let bannerCommonData = _.pick(pkg, ['version', 'copyright']);
@@ -16,29 +20,11 @@ module.exports = function(grunt) {
 
   const browserifyGruntDefaults = {
     browserifyOptions: {
-      debug: true,
       standalone: 'videojs'
     },
     plugin: [
+      ['bundle-collapser/plugin'],
       ['browserify-derequire']
-    ],
-    transform: [
-      require('babelify').configure({
-        sourceMapRelative: './',
-        loose: ['all']
-      }),
-      ['browserify-versionify', {
-        placeholder: '__VERSION__',
-        version: pkg.version
-      }],
-      ['browserify-versionify', {
-        placeholder: '__VERSION_NO_PATCH__',
-        version: version.majorMinor
-      }],
-      ['browserify-versionify', {
-        placeholder: '__SWF_VERSION__',
-        version: pkg.dependencies['videojs-swf']
-      }]
     ]
   };
 
@@ -47,7 +33,10 @@ module.exports = function(grunt) {
       release: {
         tag_name: 'v'+ version.full,
         name: version.full,
-        body: require('chg').find(version.full).changesRaw
+        body: npmRun.execSync('conventional-changelog -p videojs', {
+          silent: true,
+          encoding: 'utf8'
+        })
       },
     },
     files: {
@@ -111,23 +100,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg,
     clean: {
-      build: ['build/temp/*'],
+      build: ['build/temp/*', 'es5'],
       dist: ['dist/*']
-    },
-    jshint: {
-      src: {
-        src: ['src/js/**/*.js', 'Gruntfile.js', 'test/unit/**/*.js'],
-        options: {
-          jshintrc: '.jshintrc'
-        }
-      }
     },
     uglify: {
       options: {
-        sourceMap: true,
-        sourceMapIn: 'build/temp/video.js.map',
-        sourceMapRoot: '../../src/js',
         preserveComments: 'some',
+        screwIE8: false,
         mangle: true,
         compress: {
           sequences: true,
@@ -149,6 +128,15 @@ module.exports = function(grunt) {
     },
     dist: {},
     watch: {
+      dist: {
+        files: [
+          'build/temp/video.js',
+          'build/temp/alt/video.novtt.js',
+          'build/temp/video-js.css',
+          'build/temp/alt/video-js-cdn.css'
+        ],
+        tasks: ['copy:dist']
+      },
       novtt: {
         files: ['build/temp/video.js'],
         tasks: ['concat:novtt']
@@ -159,11 +147,11 @@ module.exports = function(grunt) {
       },
       skin: {
         files: ['src/css/**/*'],
-        tasks: ['sass']
+        tasks: ['skin']
       },
-      jshint: {
-        files: ['src/**/*', 'test/unit/**/*.js', 'Gruntfile.js'],
-        tasks: 'jshint'
+      babel: {
+        files: ['src/js/**/*.js'],
+        tasks: ['babel:es5']
       }
     },
     connect: {
@@ -190,6 +178,7 @@ module.exports = function(grunt) {
       swf:   { cwd: 'node_modules/videojs-swf/dist/', src: 'video-js.swf', dest: 'build/temp/', expand: true, filter: 'isFile' },
       ie8:   { cwd: 'node_modules/videojs-ie8/dist/', src: ['**/**'], dest: 'build/temp/ie8/', expand: true, filter: 'isFile' },
       dist:  { cwd: 'build/temp/', src: ['**/**', '!test*'], dest: 'dist/', expand: true, filter: 'isFile' },
+      a11y:  { src: 'sandbox/descriptions.html.example', dest: 'sandbox/descriptions.test-a11y.html' }, // Can only test a file with a .html or .htm extension
       examples: { cwd: 'docs/examples/', src: ['**/**'], dest: 'dist/examples/', expand: true, filter: 'isFile' }
     },
     cssmin: {
@@ -240,6 +229,7 @@ module.exports = function(grunt) {
       chrome_bs:    { browsers: ['chrome_bs'] },
       firefox_bs:   { browsers: ['firefox_bs'] },
       safari_bs:    { browsers: ['safari_bs'] },
+      edge_bs:      { browsers: ['edge_bs'] },
       ie11_bs:      { browsers: ['ie11_bs'] },
       ie10_bs:      { browsers: ['ie10_bs'] },
       ie9_bs:       { browsers: ['ie9_bs'] },
@@ -325,11 +315,21 @@ module.exports = function(grunt) {
         }
       })
     },
+    babel: {
+      es5: {
+        files: [{
+          expand: true,
+          cwd: 'src/js/',
+          src: ['**/*.js', '!base-styles.js'],
+          dest: 'es5/'
+        }]
+      }
+    },
     browserify: {
       options: browserifyGruntOptions(),
       build: {
         files: {
-          'build/temp/video.js': ['src/js/video.js']
+          'build/temp/video.js': ['es5/video.js']
         }
       },
       dist: {
@@ -342,7 +342,7 @@ module.exports = function(grunt) {
           ]
         }),
         files: {
-          'build/temp/video.js': ['src/js/video.js']
+          'build/temp/video.js': ['es5/video.js']
         }
       },
       watch: {
@@ -351,17 +351,18 @@ module.exports = function(grunt) {
           keepAlive: true
         },
         files: {
-          'build/temp/video.js': ['src/js/video.js']
+          'build/temp/video.js': ['es5/video.js']
         }
       },
       tests: {
         options: {
           browserifyOptions: {
-            debug: true,
-            standalone: false
+            verbose: true,
+            standalone: false,
+            transform: ['babelify']
           },
           plugin: [
-            ['proxyquireify/plugin']
+            ['proxyquireify/plugin', 'bundle-collapser/plugin']
           ],
           banner: false,
           watch: true,
@@ -372,14 +373,6 @@ module.exports = function(grunt) {
             'test/globals-shim.js',
             'test/unit/**/*.js'
           ]
-        }
-      }
-    },
-    exorcise: {
-      build: {
-        options: {},
-        files: {
-          'build/temp/video.js.map': ['build/temp/video.js'],
         }
       }
     },
@@ -394,25 +387,38 @@ module.exports = function(grunt) {
       }
     },
     concat: {
+      options: {
+        separator: '\n'
+      },
       novtt: {
-        options: {
-          separator: '\n'
-        },
         src: ['build/temp/video.js'],
         dest: 'build/temp/alt/video.novtt.js'
       },
       vtt: {
-        options: {
-          separator: '\n',
-        },
         src: ['build/temp/video.js', 'node_modules/videojs-vtt.js/dist/vtt.js'],
-        dest: 'build/temp/video.js',
+        dest: 'build/temp/video.js'
       },
+      ie8_addition: {
+        src: ['build/temp/video-js.css', 'src/css/ie8.css'],
+        dest: 'build/temp/video-js.css'
+      }
     },
     concurrent: {
       options: {
         logConcurrentOutput: true
       },
+      tests: [
+        'watch:babel',
+        'browserify:tests'
+      ],
+      dev: [
+        'browserify:watch',
+        'browserify:tests',
+        'watch:novtt',
+        'watch:skin',
+        'watch:dist',
+        'shell:babel'
+      ],
       // Run multiple watch tasks in parallel
       // Needed so watchify can cache intelligently
       watchAll: [
@@ -443,6 +449,56 @@ module.exports = function(grunt) {
           src: ['build/temp/video.js']
         }
       }
+    },
+    shell: {
+      babel: {
+        command: 'npm run babel -- --watch',
+        options: {
+          preferLocal: true
+        }
+      },
+      lint: {
+        command: 'npm run lint',
+        options: {
+          preferLocal: true
+        }
+      },
+      noderequire: {
+        command: 'node test/require/node.js',
+        options: {
+          failOnError: true
+        }
+      },
+      browserify: {
+        command: 'browserify test/require/browserify.js -o build/temp/browserify.js',
+        options: {
+          preferLocal: true
+        }
+      },
+      webpack: {
+        command: 'webpack test/require/webpack.js build/temp/webpack.js',
+        options: {
+          preferLocal: true
+        }
+      }
+    },
+    accessibility: {
+      options: {
+        accessibilityLevel: 'WCAG2AA',
+        reportLevels: {
+          notice: false,
+          warning: true,
+          error: true
+        },
+        ignore: [
+          // Ignore the warning about needing <optgroup> elements
+          'WCAG2AA.Principle1.Guideline1_3.1_3_1.H85.2'
+        ]
+
+      },
+      test: {
+        src: ['sandbox/descriptions.test-a11y.html']
+      }
     }
   });
 
@@ -450,20 +506,21 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('videojs-doc-generator');
   grunt.loadNpmTasks('chg');
+  grunt.loadNpmTasks('grunt-accessibility');
 
   const buildDependents = [
+    'shell:lint',
     'clean:build',
 
-    'jshint',
+    'babel:es5',
     'browserify:build',
-    'exorcise:build',
     'concat:novtt',
     'concat:vtt',
     'usebanner:novtt',
     'usebanner:vtt',
     'uglify',
 
-    'sass',
+    'skin',
     'version:css',
     'cssmin',
 
@@ -488,17 +545,40 @@ module.exports = function(grunt) {
     'zip:dist'
   ]);
 
-  grunt.registerTask('skin', ['sass']);
+  grunt.registerTask('skin', ['sass', 'concat:ie8_addition']);
 
   // Default task - build and test
   grunt.registerTask('default', ['test']);
 
-  grunt.registerTask('test', ['build', 'karma:defaults']);
+  // The test script includes coveralls only when the TRAVIS env var is set.
+  grunt.registerTask('test', function() {
+    const tasks = [
+      'build',
+      'shell:noderequire',
+      'shell:browserify',
+      'shell:webpack',
+      'karma:defaults',
+      'test-a11y'
+    ];
+
+    if (process.env.TRAVIS) {
+      if (isDocsOnly(process.env.TRAVIS_COMMIT, process.env.TRAVIS_COMMIT_RANGE)) {
+        grunt.log.write('Not running any tests because only docs were changed');
+        return;
+      }
+
+      tasks.concat(process.env.TRAVIS && 'coveralls').filter(Boolean);
+    }
+
+    grunt.task.run(tasks);
+  });
 
   // Run while developing
-  grunt.registerTask('dev', ['build', 'connect:dev', 'concurrent:watchSandbox']);
+  grunt.registerTask('dev', ['connect:dev', 'concurrent:dev']);
 
   grunt.registerTask('watchAll', ['build', 'connect:dev', 'concurrent:watchAll']);
+
+  grunt.registerTask('test-a11y', ['copy:a11y', 'accessibility']);
 
   // Pick your testing, or run both in different terminals
   grunt.registerTask('test-ui', ['browserify:tests']);

@@ -8,34 +8,40 @@ import formatTime from '../../utils/format-time.js';
 /**
  * Displays the current time
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends Component
- * @class CurrentTimeDisplay
  */
 class CurrentTimeDisplay extends Component {
 
-  constructor(player, options){
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options]
+   *        The key/value store of player options.
+   */
+  constructor(player, options) {
     super(player, options);
 
     this.on(player, 'timeupdate', this.updateContent);
   }
 
   /**
-   * Create the component's DOM element
+   * Create the `Component`'s DOM element
    *
    * @return {Element}
-   * @method createEl
+   *         The element that was created.
    */
   createEl() {
-    let el = super.createEl('div', {
+    const el = super.createEl('div', {
       className: 'vjs-current-time vjs-time-control vjs-control'
     });
 
     this.contentEl_ = Dom.createEl('div', {
       className: 'vjs-current-time-display',
       // label the current time for screen reader users
-      innerHTML: '<span class="vjs-control-text">Current Time </span>' + '0:00',
+      innerHTML: '<span class="vjs-control-text">Current Time </span>' + '0:00'
     }, {
       // tell screen readers not to automatically read the time as it changes
       'aria-live': 'off'
@@ -48,13 +54,17 @@ class CurrentTimeDisplay extends Component {
   /**
    * Update current time display
    *
-   * @method updateContent
+   * @param {EventTarget~Event} [event]
+   *        The `timeupdate` event that caused this function to run.
+   *
+   * @listens Player#timeupdate
    */
-  updateContent() {
+  updateContent(event) {
     // Allows for smooth scrubbing, when player can't keep up.
-    let time = (this.player_.scrubbing()) ? this.player_.getCache().currentTime : this.player_.currentTime();
-    let localizedText = this.localize('Current Time');
-    let formattedTime = formatTime(time, this.player_.duration());
+    const time = (this.player_.scrubbing()) ? this.player_.getCache().currentTime : this.player_.currentTime();
+    const localizedText = this.localize('Current Time');
+    const formattedTime = formatTime(time, this.player_.duration());
+
     if (formattedTime !== this.formattedTime_) {
       this.formattedTime_ = formattedTime;
       this.contentEl_.innerHTML = `<span class="vjs-control-text">${localizedText}</span> ${formattedTime}`;

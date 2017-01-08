@@ -1,37 +1,95 @@
-[Video.js homepage](http://videojs.com)
+# [Video.js][vjs-website] Documentation
 
-<h1>Video.js Documentation</h1>
+There are two categories of docs: [Guides](guides) and [API docs][api].
 
-There are two categories of docs: [Guides](./guides/) and [API docs](./api/). Guides explain general topics and use cases (e.g. setup). API docs are automatically generated from the codebase and give specific details about functions, properties, and events.
+Guides explain general topics and use cases (e.g. setup). API docs are automatically generated from the codebase and give specific details about functions, properties, and events.
 
-(Corrections and additions welcome)
+## Table of Contents
 
-## Guides
+* [Resolving Issues](#resolving-issues)
+  * [FAQ](#faq)
+  * [Troubleshooting](#troubleshooting)
+* [Guides](#guides)
+  * [Getting Started](#getting-started)
+    * [Setup](#setup)
+    * [Player Workflows](#player-workflows)
+    * [Options](#options)
+    * [Tracks](#tracks)
+  * [Customizing](#customizing)
+    * [Skins](#skins)
+    * [Plugins](#plugins)
+    * [Components](#components)
+    * [Tech](#tech)
+    * [Languages](#languages)
+    * [Hooks](#hooks)
+* [API Docs](#api-docs)
+
+## Resolving Issues
+
+### [FAQ](guides/faq.md)
+
+The frequently asked questions for video.js.
+
+### [Troubleshooting](guides/troubleshooting.md)
+
+Troubleshooting help for video.js.
+
+## [Guides](guides)
 
 ### Getting Started
 
-* [Setup](./guides/setup.md) - The setup documentation gives a deeper view of the additional methods you can use to trigger the player setup.
+#### [Setup](guides/setup.md)
 
-* [Options](./guides/options.md) - There are a number of options that can be used to change how the player behaves, starting with the HTML5 media options like autoplay and preload, and expanding to Video.js specific options.
+The setup guide covers all methods of setting up Video.js players.
 
-* [Tracks](./guides/tracks.md) - Tracks are used for displaying text information over a video, selecting different audio tracks for a video, or selected different video tracks for a video.
+#### [Player Workflows](guides/player-workflows.md)
+
+After mastering the basics of setup move over to this guide for some more advanced player workflows.
+
+#### [Options](guides/options.md)
+
+There are a number of options that can be used to change how the player behaves, starting with the HTML5 media options like autoplay and preload, and expanding to Video.js specific options.
+
+#### [Tracks](guides/tracks.md)
+
+Tracks are used for displaying text information over a video, selecting different audio tracks for a video, or selecting different video tracks.
 
 ### Customizing
 
-* [API](./guides/api.md) - The Video.js API allows you to control the video through javascript or trigger event listeners, whether the video is playing through HTML5, flash, or another playback technology.
+#### [Skins](guides/skins.md)
 
-* [Skins](./guides/skins.md) - You can change the look of the player across playback technologies just by editing a CSS file. The skins documentation gives you a intro to how the HTML and CSS of the default skin is put together.
+You can change the look of the player across playback technologies just by editing a CSS file. The skins documentation gives you a intro to how the HTML and CSS of the default skin is put together. For a list of skins you can check the [video.js wiki][skins-list].
 
-* [Tech](./guides/tech.md) - A 'playback technology' is the term we're using to represent HTML5 video, Flash, and other video plugins, as well as other players like the YouTube player. Basically anything that has a unique API to audio or video. Additional playback technologies can be added relatively easily.
+#### [Plugins](guides/plugins.md)
 
-* [Plugins](./guides/plugins.md) - You can package up interesting Video.js customizations and reuse them elsewhere. Find out how to build your own plugin or use one created by someone else.
+You can package up interesting Video.js customizations and reuse them elsewhere. Find out how to build your own plugin or [use one created by someone else][plugins-list].
 
-### Resources
+#### [Components](guides/components.md)
 
-* [Glossary](./guides/glossary.md) - Some helpful definitions.
+Video.js is built around a collection of components. These are the building blocks of the player UI.
 
-* [Removing Players](./guides/removing-players.md) - Helpful for using VideoJS in single page apps.
+#### [Tech](guides/tech.md)
 
-## API Docs
-- The most relevant API doc is the [player API doc](./api/vjs.Player.md).
-- [Full list of API Docs](./api/)
+A "tech" is the shorthand we're using to describe any video playback technology - be it HTML5 video, Flash, . Basically anything that has a unique API to audio or video. Additional playback technologies can be added relatively easily.
+
+#### [Languages](guides/languages.md)
+
+Video.js has multi-language support! Follow this guide to see how you can contribute to and use languages.
+
+#### [Hooks](guides/hooks.md)
+
+A "hook" is functionality that wants to do when videojs creates a player. Right now only `beforesetup` and `setup` are supported. See the guide for more information on that.
+
+## [API Docs][api]
+
+You can refer to the [full list of API docs][api], but the most relevant API doc is for the [Player][api-player].
+
+[plugins-list]: http://videojs.com/plugins
+
+[skins-list]: https://github.com/videojs/video.js/wiki/Skins
+
+[api]: http://docs.videojs.com/docs/api/index.html
+
+[api-player]: http://docs.videojs.com/docs/api/player.html
+
+[vjs-website]: http://videojs.com

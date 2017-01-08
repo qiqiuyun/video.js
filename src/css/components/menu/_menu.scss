@@ -14,8 +14,10 @@
 
 .vjs-menu .vjs-menu-content {
   display: block;
-  padding: 0; margin: 0;
+  padding: 0;
+  margin: 0;
   overflow: auto;
+  font-family: $text-font-family;
 }
 
 // prevent menus from opening while scrubbing (FF, IE)
@@ -33,8 +35,8 @@
   text-transform: lowercase;
 }
 
-.vjs-menu li:focus,
-.vjs-menu li:hover {
+.vjs-menu li.vjs-menu-item:focus,
+.vjs-menu li.vjs-menu-item:hover {
   outline: 0;
   @include background-color-with-alpha($secondary-background-color, $secondary-background-transparency);
 }

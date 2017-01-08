@@ -27,7 +27,7 @@ test/coverage/*
 .coveralls.yml
 .sass-cache
 
+/dist/*
+es5/*
 
 .idea/
-
-dist/

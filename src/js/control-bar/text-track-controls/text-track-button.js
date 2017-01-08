@@ -3,21 +3,26 @@
  */
 import TrackButton from '../track-button.js';
 import Component from '../../component.js';
-import * as Fn from '../../utils/fn.js';
 import TextTrackMenuItem from './text-track-menu-item.js';
 import OffTextTrackMenuItem from './off-text-track-menu-item.js';
 
 /**
  * The base class for buttons that toggle specific text track types (e.g. subtitles)
  *
- * @param {Player|Object} player
- * @param {Object=} options
  * @extends MenuButton
- * @class TextTrackButton
  */
 class TextTrackButton extends TrackButton {
 
-  constructor(player, options = {}){
+  /**
+   * Creates an instance of this class.
+   *
+   * @param {Player} player
+   *        The `Player` that this class should be attached to.
+   *
+   * @param {Object} [options={}]
+   *        The key/value store of player options.
+   */
+  constructor(player, options = {}) {
     options.tracks = player.textTracks();
 
     super(player, options);
@@ -26,27 +31,30 @@ class TextTrackButton extends TrackButton {
   /**
    * Create a menu item for each text track
    *
-   * @return {Array} Array of menu items
-   * @method createItems
+   * @param {TextTrackMenuItem[]} [items=[]]
+   *        Existing array of items to use during creation
+   *
+   * @return {TextTrackMenuItem[]}
+   *         Array of menu items that were created
    */
   createItems(items=[]) {
     
 
-    let tracks = this.player_.textTracks();
+    const tracks = this.player_.textTracks();
 
     if (!tracks) {
       return items;
     }
 
     for (let i = 0; i < tracks.length; i++) {
-      let track = tracks[i];
+      const track = tracks[i];
 
       // only add tracks that are of the appropriate kind and have a label
-      if (track['kind'] === this.kind_) {
+      if (track.kind === this.kind_) {
         items.push(new TextTrackMenuItem(this.player_, {
+          track,
           // MenuItem is selectable
-          'selectable': true,
-          'track': track
+          selectable: true
         }));
       }
     }
